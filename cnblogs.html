@@ -27,13 +27,26 @@ body{
     display:none;
 }
 #navbar{
-    height:5%;
+    height:auto;
     width:100%;
     border:0;
     margin:0;
     padding:0;
-    box-shadow:0 0 10px grey;
-    background:rgba(255,255,255,0.5);
+    box-shadow:0 0 10px #bbbbbb;
+    background:white;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index: 9999;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+}
+#fakenavbar{
+    height:3.5em;
+    width:100%;
+    border:0;
+    margin:0;
+    padding:0;
 }
 #banner{
     height:40%;
@@ -41,7 +54,6 @@ body{
     border:0;
     margin:0;
     padding:0;
-    box-shadow:0 0 10px grey;
     background:linear-gradient(160deg, #00ffd5 20%,#008cff 80%);
 }
 #titleText{
@@ -64,9 +76,31 @@ body{
     margin-left: 3px !important;
     margin-right: 3px !important;
 }
+.dayTitle{
+    display:none;
+}
+.c_b_p_desc img{
+    width:100%;
+    max-height:10000px;
+}
 </style>
 <!--页首Html代码-->
-<div id="navbar"></div>
+<div id="navbar">
+    <div style="width:1em;float:left;">&nbsp;</div>
+        <a href="http://www.cnblogs.com/lyj00912">
+            <img style="float:left;height:2.5em;border-radius: 1.25em;" src="http://q1.qlogo.cn/g?b=qq&nk=3122742760&s=640" />
+        </a>
+    <div style="width:0.5em;float:left;font-size:2.1em;font-family:Tahoma, Geneva, sans-serif;border-right:solid 0.06em;border-right-color:#CCC;">&nbsp;</div>
+    <div style="width:1em;float:left;">&nbsp;</div>
+    <a href="http://www.cnblogs.com/lyj00912" style="color:black;">
+        <div style="float:left;font-size:2em;font-family:Tahoma, Geneva, sans-serif;">lyj00912的博客</div>
+    </a>
+    <div style="float:right;font-size:1.5em;font-family:Tahoma, Geneva, sans-serif;">
+        <div style="font-family:Tahoma, Geneva, sans-serif;background:rgb(129,216,206);float:left;padding:0.25em;color:white;">关于我</div>
+        <div style="font-family:Tahoma, Geneva, sans-serif;float:left;">&nbsp;&nbsp;</div>
+    </div>
+</div>
+<div id="fakenavbar">&nbsp;</div>
 <div id="banner">
     <div id="wrapper">
         <div id="cell">
