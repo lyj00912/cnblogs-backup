@@ -1,0 +1,1494 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/"><channel><title>博客园-lyj00912</title><link>http://www.cnblogs.com/lyj00912/</link><description /><language>zh-cn</language><lastBuildDate>Wed, 15 Jan 2020 13:54:10 GMT</lastBuildDate><pubDate>Wed, 15 Jan 2020 13:54:10 GMT</pubDate><ttl>60</ttl><item><title>git绑定上传已存在的仓库到github</title><link>http://www.cnblogs.com/lyj00912/archive/2020/01/14/12194310.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Tue, 14 Jan 2020 14:00:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2020/01/14/12194310.html</guid><description><![CDATA[<p>之前使用github都是创建一个全新的仓库，然后clone下来用，但如果我已经有一个正在使用的仓库，想要绑定上传已存在的仓库到github，怎么做呢？其实在github创建仓库的时候会提示：</p>
+<h3>&hellip;or push an existing repository from the command line</h3>
+<div class="cnblogs_code">
+<pre>git remote add origin https:<span style="color: #008000;">//</span><span style="color: #008000;">github.com/lyj00912/Duino9341.git</span>
+git push -u origin master</pre>
+</div>
+<p>用这两句命令可以绑定上传已存在的仓库到github。</p>]]></description></item><item><title>git分支的进阶操作git log --graph --all查看所有分支的提交修改</title><link>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186908.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 13 Jan 2020 05:48:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186908.html</guid><description><![CDATA[<p><span></span>我们在廖雪峰Git教程或者一些书籍学习git分支时，大都会学习到这样一个命令git log --graph或者就是单纯的git log，他可以用来查看当前分支。但是这个弊端就是：它只能查看与当前分支有关的提交和合并，比如我们有2个分支master和dev，当前分支是master，我们输入git log只能查询到关于master主分支的所有提交，根本看不到dev分支的任何蛛丝马迹，这太不方便了。</p>
+<p><em id="__mceDel">Git官方教程的这一小节Git 分支 - 分支简介给出了完美的解决方案：git log --graph --all<br />&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;<br />版权声明：本文为CSDN博主「萌新李同学(李俊德-大连理工大学)」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br />原文链接：https://blog.csdn.net/wq6ylg08/article/details/89013347</em></p>]]></description></item><item><title>Git一次性强制push所有分支</title><link>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186885.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 13 Jan 2020 05:41:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186885.html</guid><description><![CDATA[<p>现在手上有两个分支，master和rotation，想一次性推送所有分支，可以用--all参数来实现：</p>
+<div class="cnblogs_code">
+<pre>git push --all origin</pre>
+</div>
+<p>如果远程仓库有更改，但你需要直接推送，那就可以使用强覆盖方式（-f参数）用你本地的代码替代git仓库内的内容：</p>
+<div class="cnblogs_code">
+<pre>git push -f</pre>
+</div>
+<p>结合起来：</p>
+<div class="cnblogs_code">
+<pre>git push --all origin -f</pre>
+</div>
+<p>问题搞定！</p>]]></description></item><item><title>Git操作 ：从一个分支cherry-pick多个commit到其他分支</title><link>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186867.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 13 Jan 2020 05:34:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2020/01/13/12186867.html</guid><description><![CDATA[<p>在branch1开发，进行多个提交，这时切换到branch2，想把之前branch1分支提交的commit都【复制】过来，怎么办？</p>
+<p>首先切换到branch1分支，然后查看提交历史记录，也可以用sourceTree查看，也可以用命令git log</p>
+<p>例如我的git log 如下：</p>
+<p>commit1 xxx_id1<br />commit2 xxx_id2<br />commit3 xxx_id3</p>
+<p>我想把 commit1 和 commit3 复制到 branch2 分支里，只需要切换到 branch2 分支，然后执行</p>
+<p>git cherry-pick xxx_id1&hellip;xxx_id3</p>
+<p>注意中间的两个点，表示把两个commit区间的所有commit多复制过去</p>
+<p>单个 commit 只需要 git cherry-pick commitid</p>
+<p>多个commit 只需要git cherry-pick</p>
+<p>commitid1&hellip;commitid100</p>
+<p>注意，不包含第一个 commitid ， 即 git cherry-pick (commitid1&hellip;commitid100]</p>
+<p>如果想搞成[]区间，使用 git cherry-pick A^&hellip;B 相当于[A B]包含A</p>
+<p>（转载自<a href="https://blog.csdn.net/qq_37716175/article/details/86520831">https://blog.csdn.net/qq_37716175/article/details/86520831</a>）</p>]]></description></item><item><title>【原理】从零编写ILI9341驱动全过程（基于Arduino）</title><link>http://www.cnblogs.com/lyj00912/archive/2020/01/12/12180140.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Sun, 12 Jan 2020 14:55:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2020/01/12/12180140.html</guid><description><![CDATA[<p>最近在淘宝入手了一块ILI9341彩色屏幕，支持320x240分辨率。之前一直很好奇这类单片机驱动的彩色屏幕的原理，就打算自己写一个驱动，从电流层面操控ILI9341屏幕。话不多说，我们开始吧(￣▽￣)~*</p>
+<h1>1.ILI9341芯片和ILI9341驱动板</h1>
+<p>首先这里要明确两个概念，ILI9341芯片和ILI9341驱动板。</p>
+<p>ILI9341芯片是ilitek发布的液晶驱动芯片，是这个样子的：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112192532919-2026868785.png" alt="" /></p>
+<p>而淘宝上的ILI9341驱动板是把ILI9341芯片、屏幕和针脚焊接在一起的电路板，它可能是这个样子的：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112192737885-1815190781.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>也可能是这个样子的：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112192754936-1794649796.png" alt="" width="441" height="441" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;还可能是这个样子的：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112192812458-344010447.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>没错，不同的厂家可以制造不同形状，不同接口的ILI9341驱动板，但他们上面都有ILI9341芯片，所以我们可以用相同的方法操作它。</p>
+<h1>2.如何操作它呢？</h1>
+<p>这是ILI9341驱动板的背面，我在上面做了些标注，应该会方便理解些。我们只要控制这些针脚的通电与否（高电平与低电平），就能够获得操控这块屏幕的&ldquo;完整权限&rdquo;！那这些针脚的定义是什么呢？我们一个一个看：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112195417746-1534033847.png" alt="" /></p>
+<p>左上角有五个最重要的针脚，分别是LCD_RST、LCD_CS、LCD_RS、LCD_WR和LCD_RD：（直接用文字写不能冒号对齐，没办法，开个代码框(￣▽￣)~*）</p>
+<div class="cnblogs_code">
+<pre>LCD_RST ： 即LCD Reset，用于在通电之后复位，初始化整个模块。
+
+LCD_CS  ： 即LCD Chip Select，用于多个芯片之间的片选操作。由于这块驱动板只有一个可用的芯片，所以一般该针脚不通电。
+
+LCD_RS  ： 又称D/CX信号线，用于切换写命令（Command）和写数据（Data），当对显示屏写命令（Command）时，应该让针脚不通电，当对显示屏写数据（Data）时，应该让针脚通电。
+
+LCD_WR  ： 写使能。当LCD_WR不通电，并且LCD_RD通电时，数据传输方向为写入。
+
+LCD_RD  ： 读使能。</pre>
+</div>
+<p>左下角的针脚负责供电，不细讲。</p>
+<p>右上角的LCD_D0到LCD_D7是数据脚，通过控制它的通电与否来传输8个比特，也就是8个0或1。这种方式可以传输一个最小值0，最大值255的数字，我们用它来传输所有命令和数据。</p>
+<p>右下角的SD_SS,SD_DI,SD_D0,SD_SCK适用于控制SD卡读写的，不属于ILI9341的范畴，我们先不讨论。</p>
+<p>那么，如何操作它呢？这张图能够很清楚的说明：（下面用拉低代表示不通电，拉高表示通电，这样术语会更加标准）</p>
+<p>&nbsp;<img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112200125225-301876339.png" alt="" width="866" height="517" /></p>
+<ul>
+<li>单片机开机，ILI9341驱动板接收到电流，开始进入待命状态</li>
+<li>拉低LCD_CS片选信号，选择对ILI9341芯片发送命令</li>
+<li>通过拉高拉低LCD_D0到LCD_D7数据脚，来表示二进制数据</li>
+<li>拉低拉高LCD_RS针脚来告诉机器这是一个命令，还是一个数据</li>
+<li>拉低LCD_WR，进行写使能（可以理解为按下回车键，把LCD_D0到D7的数据发送出去）</li>
+</ul>
+<p>这就是发送一个命令或者数据的方法。二进制，十进制和十六进制的转换和表达先直接略过，如果要展开，那可能可以出一本书了( &bull; ̀&omega;&bull;́ )✧，关于LCD_D0到D7脚应该发送什么，ILITEK在设计ILI9341时就已经规定好了，中文文档在此：</p>
+<p>接下来，就是，愉快的，编码时间啦( &bull; ̀&omega;&bull;́ )✧！！！</p>
+<h1>3.兼容性设定</h1>
+<p>不知刚才你有没有注意到数据脚是从LCD_D2开始的？那是因为Arduino Uno开发板的第0和1脚是USB针脚，不能被使用，只能从第2个针脚开始设计：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200111211922273-452071791.jpg" alt="" /></p>
+<p>那我们在编程时要用到LCD_D0和LCD_D1时，就必须写成8和9。另外不同机器脚位也不一样，所以我用宏定义来简化程序：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> LCD_D0   8
+<span style="color: #0000ff;">#define</span> LCD_D1   9
+<span style="color: #0000ff;">#define</span> LCD_D2   2
+<span style="color: #0000ff;">#define</span> LCD_D3   3
+<span style="color: #0000ff;">#define</span> LCD_D4   4
+<span style="color: #0000ff;">#define</span> LCD_D5   5
+<span style="color: #0000ff;">#define</span> LCD_D6   6
+<span style="color: #0000ff;">#define</span> LCD_D7   7
+<span style="color: #0000ff;">#define</span> LCD_RD   A0
+<span style="color: #0000ff;">#define</span> LCD_WR   A1
+<span style="color: #0000ff;">#define</span> LCD_RS   A2
+<span style="color: #0000ff;">#define</span> LCD_CS   A3
+<span style="color: #0000ff;">#define</span> LCD_RST  A4</pre>
+</div>
+<p>这样即解决了LCD_D0和LCD_D1脚的问题，还搞定的不同开发板的兼容性问题。由于#define是在预编译阶段生成的，所以不会影响代码运行的速度。</p>
+<h1>4.发送命令和数据</h1>
+<p>调用这块屏幕的方法很明确，就是写入2进制数字。通过设计厂商提供的命令表发送相应的2进制命令和数据，实现操控。这样做的好处是无论你使用的是什么机器，什么驱动板，只要实现了LcdWriteCommand()和LcdWriteData()两个函数，就可以实现对屏幕的完全控制。</p>
+<p>你当然可以用最直接的办法去控制引脚，比如digitalWrite():</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span> LcdWriteCommand(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  digitalWrite(LCD_RS,LOW);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  digitalWrite(LCD_D0,d%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D1,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D2,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D3,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D4,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D5,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D6,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D7,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  digitalWrite(LCD_WR,LOW);
+  digitalWrite(LCD_WR,HIGH);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdWriteData(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Data Mode On</span>
+<span style="color: #000000;">  digitalWrite(LCD_RS,HIGH);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  digitalWrite(LCD_D0,d%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D1,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D2,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D3,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D4,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D5,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D6,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  digitalWrite(LCD_D7,d</span>%<span style="color: #800080;">2</span><span style="color: #000000;">);
+  d </span>= d &gt;&gt; <span style="color: #800080;">1</span><span style="color: #000000;">;
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  digitalWrite(LCD_WR,LOW);
+  digitalWrite(LCD_WR,HIGH);
+}</span></pre>
+</div>
+<p>但是这样做的话，速度嘛。。。看看这个，你就不会想用digitalWrite了：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112202658047-1998618339.gif" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;单片机中，速度为王，我们还是直接改Register吧：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span> LcdWriteCommand(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100); 
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011); 
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdWriteData(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteHIGH(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100);
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}</span></pre>
+</div>
+<p>这段代码中，我用了宏定义来实现fastDigitalWriteHIGH()和fastDigitalWriteLOW()，这两个定义能避免函数的栈调用。其实用内联函数来写也可以实现：</p>
+<div class="cnblogs_code">
+<pre>inline <span style="color: #0000ff;">void</span> fastDigitalWriteHIGH(<span style="color: #0000ff;">int</span><span style="color: #000000;"> Pin){
+  </span>*(portOutputRegister(digitalPinToPort(Pin)))|=<span style="color: #000000;">digitalPinToBitMask(Pin);
+  </span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>但我就是喜欢宏定义，而且宏定义行数少些。</p>
+<p>另外你可能会疑惑：什么是PORTB和PORTD？</p>
+<p>PORTB其实就是针脚8-13，PORTD其实就是针脚0-7：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112215356431-1791794131.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;假如你有一个这样的二进制数：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800080;">00000100</span></pre>
+</div>
+<p>把他转换成十进制：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800080;">4</span>     </pre>
+</div>
+<p>再把它赋值给PORTD</p>
+<div class="cnblogs_code">
+<pre>PORTD = <span style="color: #800080;">4</span>;</pre>
+</div>
+<p>你就会发现针脚2通电了（图中连接到左边第一个红色灯泡）：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112215931217-2031804272.jpg" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;这就是PORTD的真正意义，它使用一个从0到255的数，记录针脚0到7的通电情况。</p>
+<p>那我们为什么不用digitalWrite()，而是要用PORTB和PORTD呢？因为快啊(￣▽￣)~*</p>
+<h1>5.Enjoy!</h1>
+<p>我们刚刚实现了LcdWriteCommand()和LcdWriteData()两个函数，现在，我们就可以实现对屏幕的完全控制了！</p>
+<p>首先，先运行一段初始化命令：</p>
+<div class="cnblogs_code">
+<pre>  <span style="color: #008000;">//</span><span style="color: #008000;">Initialize Data Pins</span>
+<span style="color: #000000;">  pinMode(LCD_D0,OUTPUT);
+  pinMode(LCD_D1,OUTPUT);
+  pinMode(LCD_D2,OUTPUT);
+  pinMode(LCD_D3,OUTPUT);
+  pinMode(LCD_D4,OUTPUT);
+  pinMode(LCD_D5,OUTPUT);
+  pinMode(LCD_D6,OUTPUT);
+  pinMode(LCD_D7,OUTPUT);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Initialize Command Pins</span>
+<span style="color: #000000;">  pinMode(LCD_RD,OUTPUT);
+  pinMode(LCD_WR,OUTPUT);
+  pinMode(LCD_RS,OUTPUT);
+  pinMode(LCD_CS,OUTPUT);
+  pinMode(LCD_RST,OUTPUT);
+  digitalWrite(LCD_CS,LOW);
+  digitalWrite(LCD_RD,HIGH);
+  digitalWrite(LCD_WR,LOW);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Reset</span>
+<span style="color: #000000;">  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,LOW);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCB</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x39</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x2C</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x34</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x02</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCF</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0XC1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X30</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xE8</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x85</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x78</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xEA</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xED</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x64</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x03</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X12</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X81</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xF7</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x20</span><span style="color: #000000;">);
+  
+  LcdWriteCommand(</span><span style="color: #800080;">0xC0</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x23</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">VRH[5:0] </span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC1</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x10</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">SAP[2:0];BT[3:0] </span>
+<span style="color: #000000;">
+  LcdWriteCommand(</span><span style="color: #800080;">0xC5</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control </span>
+  LcdWriteData(<span style="color: #800080;">0x3e</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">Contrast</span>
+  LcdWriteData(<span style="color: #800080;">0x28</span><span style="color: #000000;">); 
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC7</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control2 </span>
+  LcdWriteData(<span style="color: #800080;">0x86</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">--</span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0x36</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Memory Access Control </span>
+  LcdWriteData(<span style="color: #800080;">0x48</span><span style="color: #000000;">);   
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x3A</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x55</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xB1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x18</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xB6</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Display Function Control </span>
+  LcdWriteData(<span style="color: #800080;">0x08</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x82</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x27</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x11</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Exit Sleep </span>
+  delay(<span style="color: #800080;">120</span><span style="color: #000000;">);
+        
+  LcdWriteCommand(</span><span style="color: #800080;">0x29</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Display on </span>
+  LcdWriteCommand(<span style="color: #800080;">0x2c</span>);</pre>
+</div>
+<p>这么多！不要怕，原样复制过去运行就好。这段命令是按照ILITEK设计文档中的规则发送的，用于初始化屏幕。运行完这段命令之后，我们就可以开始发自己的命令了。</p>
+<p>我们试着来清一下屏。清屏就是指定一块区域，然后给屏幕每一个像素点的颜色为白色，这样就好了。</p>
+<p>首先定义我们要写入的区域，这里就是从(0,0)写入到(239,319)：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span> x1 = <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">int</span> x2 = <span style="color: #800080;">239</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">int</span> y1 = <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">int</span> y2 = <span style="color: #800080;">319</span>;</pre>
+</div>
+<p>接着通知屏幕我们要写入的区域的X坐标的起始、终止位置（命令0x2a）：</p>
+<div class="cnblogs_code">
+<pre>LcdWriteCommand(<span style="color: #800080;">0x2a</span>);</pre>
+</div>
+<p>然后发送X坐标的起始位置（x1），和X坐标的终止位置（x2）。我们的机器一次只能发送八位数字，但八位数字最大只能表示255，所以我们要分两次发送，先发送前八位，再发送后八位：</p>
+<div class="cnblogs_code">
+<pre>LcdWriteData(x1&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+LcdWriteData(x1);
+LcdWriteData(x2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+LcdWriteData(x2);</span></pre>
+</div>
+<p>Y坐标也是一样，只是把通知命令改成0x2b：</p>
+<div class="cnblogs_code">
+<pre>LcdWriteCommand(<span style="color: #800080;">0x2b</span><span style="color: #000000;">);
+LcdWriteData(y1</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+LcdWriteData(y1);
+LcdWriteData(y2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+LcdWriteData(y2);</span></pre>
+</div>
+<p>接着，我们发送开始写入的命令（0x2c），告诉屏幕我要开始发送像素了：</p>
+<div class="cnblogs_code">
+<pre>LcdWriteCommand(<span style="color: #800080;">0x2c</span>);</pre>
+</div>
+<p>最后，发送所有像素的颜色数据（Data）。里面的RGB()宏定义是我在上一篇文章实现的。另外，因为是数据，所以我们要使用LcdWriteData()：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> RGB(r,g,b) ((b&amp;31)+((g&amp;63)&lt;&lt;5)+((r&amp;31)&lt;&lt;11))
+
+<span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i=y1;i&lt;=y2;i++<span style="color: #000000;">){
+  </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> j=x1;j&lt;=x2;j++<span style="color: #000000;">){
+    LcdWriteData(RGB(</span><span style="color: #800080;">31</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">31</span>)&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+    LcdWriteData(RGB(</span><span style="color: #800080;">31</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">31</span><span style="color: #000000;">));
+  }
+}</span></pre>
+</div>
+<p>保存，下载。</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112223907113-1444628286.gif" alt="" /></p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112224036236-88363510.png" alt="" /></p>
+<p>刷屏完整代码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> Breakout/Arduino UNO pin usage:
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> LCD Data Bit :   7   6   5   4   3   2   1   0
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> Uno dig. pin :   7   6   5   4   3   2   9   8
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> Uno port/pin : PD7 PD6 PD5 PD4 PD3 PD2 PB1 PB0
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> Mega dig. pin:  29  28  27  26  25  24  23  22</span>
+<span style="color: #0000ff;">#define</span> LCD_D0   8
+<span style="color: #0000ff;">#define</span> LCD_D1   9
+<span style="color: #0000ff;">#define</span> LCD_D2   2
+<span style="color: #0000ff;">#define</span> LCD_D3   3
+<span style="color: #0000ff;">#define</span> LCD_D4   4
+<span style="color: #0000ff;">#define</span> LCD_D5   5
+<span style="color: #0000ff;">#define</span> LCD_D6   6
+<span style="color: #0000ff;">#define</span> LCD_D7   7
+<span style="color: #0000ff;">#define</span> LCD_RD   A0
+<span style="color: #0000ff;">#define</span> LCD_WR   A1
+<span style="color: #0000ff;">#define</span> LCD_RS   A2
+<span style="color: #0000ff;">#define</span> LCD_CS   A3
+<span style="color: #0000ff;">#define</span> LCD_RST  A4
+<span style="color: #0000ff;">#define</span> fastDigitalWriteHIGH(Pin) *(portOutputRegister(digitalPinToPort(Pin)))|=digitalPinToBitMask(Pin)  <span style="color: #008000;">//</span><span style="color: #008000;">Faster digitalWrite(Pin,HIGH);</span>
+<span style="color: #0000ff;">#define</span> fastDigitalWriteLOW(Pin) *(portOutputRegister(digitalPinToPort(Pin)))&amp;=~digitalPinToBitMask(Pin)  <span style="color: #008000;">//</span><span style="color: #008000;">Faster digitalWrite(Pin,LOW);</span>
+<span style="color: #0000ff;">#define</span> RGB(r,g,b) ((b&amp;31)+((g&amp;63)&lt;&lt;5)+((r&amp;31)&lt;&lt;11))
+
+<span style="color: #0000ff;">void</span> LcdWriteCommand(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100); 
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011); 
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdWriteData(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteHIGH(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100);
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> setup(){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Initialize Data Pins</span>
+<span style="color: #000000;">  pinMode(LCD_D0,OUTPUT);
+  pinMode(LCD_D1,OUTPUT);
+  pinMode(LCD_D2,OUTPUT);
+  pinMode(LCD_D3,OUTPUT);
+  pinMode(LCD_D4,OUTPUT);
+  pinMode(LCD_D5,OUTPUT);
+  pinMode(LCD_D6,OUTPUT);
+  pinMode(LCD_D7,OUTPUT);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Initialize Command Pins</span>
+<span style="color: #000000;">  pinMode(LCD_RD,OUTPUT);
+  pinMode(LCD_WR,OUTPUT);
+  pinMode(LCD_RS,OUTPUT);
+  pinMode(LCD_CS,OUTPUT);
+  pinMode(LCD_RST,OUTPUT);
+  digitalWrite(LCD_CS,LOW);
+  digitalWrite(LCD_RD,HIGH);
+  digitalWrite(LCD_WR,LOW);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Reset</span>
+<span style="color: #000000;">  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,LOW);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCB</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x39</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x2C</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x34</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x02</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCF</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0XC1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X30</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xE8</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x85</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x78</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xEA</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xED</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x64</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x03</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X12</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X81</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xF7</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x20</span><span style="color: #000000;">);
+  
+  LcdWriteCommand(</span><span style="color: #800080;">0xC0</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x23</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">VRH[5:0] </span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC1</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x10</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">SAP[2:0];BT[3:0] </span>
+<span style="color: #000000;">
+  LcdWriteCommand(</span><span style="color: #800080;">0xC5</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control </span>
+  LcdWriteData(<span style="color: #800080;">0x3e</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">Contrast</span>
+  LcdWriteData(<span style="color: #800080;">0x28</span><span style="color: #000000;">); 
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC7</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control2 </span>
+  LcdWriteData(<span style="color: #800080;">0x86</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">--</span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0x36</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Memory Access Control </span>
+  LcdWriteData(<span style="color: #800080;">0x48</span><span style="color: #000000;">);   
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x3A</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x55</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xB1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x18</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xB6</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Display Function Control </span>
+  LcdWriteData(<span style="color: #800080;">0x08</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x82</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x27</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x11</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Exit Sleep </span>
+  delay(<span style="color: #800080;">120</span><span style="color: #000000;">);
+        
+  LcdWriteCommand(</span><span style="color: #800080;">0x29</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Display on </span>
+  LcdWriteCommand(<span style="color: #800080;">0x2c</span><span style="color: #000000;">);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Set Writing Area</span>
+  <span style="color: #0000ff;">int</span> x1 = <span style="color: #800080;">0</span><span style="color: #000000;">;
+  </span><span style="color: #0000ff;">int</span> x2 = <span style="color: #800080;">239</span><span style="color: #000000;">;
+  </span><span style="color: #0000ff;">int</span> y1 = <span style="color: #800080;">0</span><span style="color: #000000;">;
+  </span><span style="color: #0000ff;">int</span> y2 = <span style="color: #800080;">319</span><span style="color: #000000;">;
+  LcdWriteCommand(</span><span style="color: #800080;">0x2a</span><span style="color: #000000;">);
+  LcdWriteData(x1</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(x1);
+  LcdWriteData(x2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(x2);
+  LcdWriteCommand(</span><span style="color: #800080;">0x2b</span><span style="color: #000000;">);
+  LcdWriteData(y1</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(y1);
+  LcdWriteData(y2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(y2);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Start Writing</span>
+  LcdWriteCommand(<span style="color: #800080;">0x2c</span><span style="color: #000000;">);
+  </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i=y1;i&lt;=y2;i++<span style="color: #000000;">){
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> j=x1;j&lt;=x2;j++<span style="color: #000000;">){
+      LcdWriteData(RGB(</span><span style="color: #800080;">31</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">31</span>)&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+      LcdWriteData(RGB(</span><span style="color: #800080;">31</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">31</span><span style="color: #000000;">));
+    }
+  }
+}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> loop(){
+  
+}</span></pre>
+</div>
+<p>接下来的路线就很简单了，把指定区域的命令（0x2a,0x2b,0x2c）分装成LcdOpenWindow()函数，再实现LcdFill()函数，一个完整的ILI9341驱动就完成了：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> LCD_D0   8
+<span style="color: #0000ff;">#define</span> LCD_D1   9
+<span style="color: #0000ff;">#define</span> LCD_D2   2
+<span style="color: #0000ff;">#define</span> LCD_D3   3
+<span style="color: #0000ff;">#define</span> LCD_D4   4
+<span style="color: #0000ff;">#define</span> LCD_D5   5
+<span style="color: #0000ff;">#define</span> LCD_D6   6
+<span style="color: #0000ff;">#define</span> LCD_D7   7
+<span style="color: #0000ff;">#define</span> LCD_RD   A0
+<span style="color: #0000ff;">#define</span> LCD_WR   A1
+<span style="color: #0000ff;">#define</span> LCD_RS   A2
+<span style="color: #0000ff;">#define</span> LCD_CS   A3
+<span style="color: #0000ff;">#define</span> LCD_RST  A4
+<span style="color: #0000ff;">#define</span> fastDigitalWriteHIGH(Pin) *(portOutputRegister(digitalPinToPort(Pin)))|=digitalPinToBitMask(Pin)  <span style="color: #008000;">//</span><span style="color: #008000;">Faster digitalWrite(Pin,HIGH);</span>
+<span style="color: #0000ff;">#define</span> fastDigitalWriteLOW(Pin) *(portOutputRegister(digitalPinToPort(Pin)))&amp;=~digitalPinToBitMask(Pin)  <span style="color: #008000;">//</span><span style="color: #008000;">Faster digitalWrite(Pin,LOW);</span>
+<span style="color: #0000ff;">#define</span> RGB(r,g,b) ((b&amp;31)+((g&amp;63)&lt;&lt;5)+((r&amp;31)&lt;&lt;11))
+
+<span style="color: #0000ff;">void</span> LcdWriteCommand(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100); 
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011); 
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdWriteData(unsigned <span style="color: #0000ff;">char</span><span style="color: #000000;"> d){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Command Mode On</span>
+<span style="color: #000000;">  fastDigitalWriteHIGH(LCD_RS);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Write Datas to LCD_D0 to LCD_D7</span>
+  PORTD = (PORTD &amp; B00000011) | ((d) &amp;<span style="color: #000000;"> B11111100);
+  PORTB </span>= (PORTB &amp; B11111100) | ((d) &amp;<span style="color: #000000;"> B00000011);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Enable Datas</span>
+<span style="color: #000000;">  fastDigitalWriteLOW(LCD_WR);
+  fastDigitalWriteHIGH(LCD_WR);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdInit(<span style="color: #0000ff;">void</span><span style="color: #000000;">){
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Initialize Data Pins</span>
+<span style="color: #000000;">  pinMode(LCD_D0,OUTPUT);
+  pinMode(LCD_D1,OUTPUT);
+  pinMode(LCD_D2,OUTPUT);
+  pinMode(LCD_D3,OUTPUT);
+  pinMode(LCD_D4,OUTPUT);
+  pinMode(LCD_D5,OUTPUT);
+  pinMode(LCD_D6,OUTPUT);
+  pinMode(LCD_D7,OUTPUT);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Initialize Command Pins</span>
+<span style="color: #000000;">  pinMode(LCD_RD,OUTPUT);
+  pinMode(LCD_WR,OUTPUT);
+  pinMode(LCD_RS,OUTPUT);
+  pinMode(LCD_CS,OUTPUT);
+  pinMode(LCD_RST,OUTPUT);
+  digitalWrite(LCD_CS,LOW);
+  digitalWrite(LCD_RD,HIGH);
+  digitalWrite(LCD_WR,LOW);
+
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Reset</span>
+<span style="color: #000000;">  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,LOW);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+  digitalWrite(LCD_RST,HIGH);
+  delay(</span><span style="color: #800080;">15</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCB</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x39</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x2C</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x34</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x02</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xCF</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0XC1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X30</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xE8</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x85</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x78</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xEA</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xED</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x64</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x03</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X12</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0X81</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xF7</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x20</span><span style="color: #000000;">);
+  
+  LcdWriteCommand(</span><span style="color: #800080;">0xC0</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x23</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">VRH[5:0] </span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC1</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Power control </span>
+  LcdWriteData(<span style="color: #800080;">0x10</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">SAP[2:0];BT[3:0] </span>
+<span style="color: #000000;">
+  LcdWriteCommand(</span><span style="color: #800080;">0xC5</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control </span>
+  LcdWriteData(<span style="color: #800080;">0x3e</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">Contrast</span>
+  LcdWriteData(<span style="color: #800080;">0x28</span><span style="color: #000000;">); 
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xC7</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">VCM control2 </span>
+  LcdWriteData(<span style="color: #800080;">0x86</span>);   <span style="color: #008000;">//</span><span style="color: #008000;">--</span>
+<span style="color: #000000;"> 
+  LcdWriteCommand(</span><span style="color: #800080;">0x36</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Memory Access Control </span>
+  LcdWriteData(<span style="color: #800080;">0x48</span><span style="color: #000000;">);   
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x3A</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x55</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0xB1</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x00</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x18</span><span style="color: #000000;">);
+ 
+  LcdWriteCommand(</span><span style="color: #800080;">0xB6</span>);    <span style="color: #008000;">//</span><span style="color: #008000;"> Display Function Control </span>
+  LcdWriteData(<span style="color: #800080;">0x08</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x82</span><span style="color: #000000;">);
+  LcdWriteData(</span><span style="color: #800080;">0x27</span><span style="color: #000000;">);
+
+  LcdWriteCommand(</span><span style="color: #800080;">0x11</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Exit Sleep </span>
+  delay(<span style="color: #800080;">120</span><span style="color: #000000;">);
+        
+  LcdWriteCommand(</span><span style="color: #800080;">0x29</span>);    <span style="color: #008000;">//</span><span style="color: #008000;">Display on </span>
+  LcdWriteCommand(<span style="color: #800080;">0x2c</span><span style="color: #000000;">);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdOpenWindow(unsigned <span style="color: #0000ff;">int</span> x1,unsigned <span style="color: #0000ff;">int</span> y1,unsigned <span style="color: #0000ff;">int</span> x2,unsigned <span style="color: #0000ff;">int</span><span style="color: #000000;"> y2){
+  LcdWriteCommand(</span><span style="color: #800080;">0x2a</span><span style="color: #000000;">);
+  LcdWriteData(x1</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(x1);
+  LcdWriteData(x2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(x2);
+  LcdWriteCommand(</span><span style="color: #800080;">0x2b</span><span style="color: #000000;">);
+  LcdWriteData(y1</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(y1);
+  LcdWriteData(y2</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+  LcdWriteData(y2);
+  LcdWriteCommand(</span><span style="color: #800080;">0x2c</span><span style="color: #000000;">);
+}
+
+</span><span style="color: #0000ff;">void</span> LcdFill(<span style="color: #0000ff;">int</span> x,<span style="color: #0000ff;">int</span> y,<span style="color: #0000ff;">int</span> width,<span style="color: #0000ff;">int</span> height,unsigned <span style="color: #0000ff;">int</span><span style="color: #000000;"> color)
+{
+  LcdOpenWindow(x,y,x</span>+width-<span style="color: #800080;">1</span>,y+height-<span style="color: #800080;">1</span><span style="color: #000000;">);
+  </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i=y;i&lt;y+height;i++<span style="color: #000000;">){
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> j=x;j&lt;x+width;j++<span style="color: #000000;">){
+      LcdWriteData(color</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+      LcdWriteData(color);
+    }
+  }
+}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> setup(){
+  LcdInit();
+  LcdFill(</span><span style="color: #800080;">0</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">239</span>,<span style="color: #800080;">319</span>,RGB(<span style="color: #800080;">31</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">31</span><span style="color: #000000;">));
+  LcdFill(</span><span style="color: #800080;">10</span>,<span style="color: #800080;">10</span>,<span style="color: #800080;">100</span>,<span style="color: #800080;">100</span>,RGB(<span style="color: #800080;">31</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">0</span><span style="color: #000000;">));
+  LcdFill(</span><span style="color: #800080;">20</span>,<span style="color: #800080;">20</span>,<span style="color: #800080;">110</span>,<span style="color: #800080;">110</span>,RGB(<span style="color: #800080;">0</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">0</span><span style="color: #000000;">));
+  LcdFill(</span><span style="color: #800080;">30</span>,<span style="color: #800080;">30</span>,<span style="color: #800080;">120</span>,<span style="color: #800080;">120</span>,RGB(<span style="color: #800080;">0</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">31</span><span style="color: #000000;">));
+}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> loop(){
+  
+}</span></pre>
+</div>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/202001/1748871-20200112225021895-145980163.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;都看到这了，还不点个赞吗？(✪&omega;✪)</p>]]></description></item><item><title>Arduino驱动ILI9341彩屏（一）——颜色问题</title><link>http://www.cnblogs.com/lyj00912/archive/2019/11/23/11917788.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Sat, 23 Nov 2019 06:08:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/11/23/11917788.html</guid><description><![CDATA[<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123124457225-809308248.jpg" alt="" /></p>
+<p>&nbsp;</p>
+<p>最近在淘宝的店铺上淘到了一块ILI9341的彩色液晶屏，打算研究一下如何使用。</p>
+<p>淘宝店铺购买屏幕之后有附源代码可供下载，代码质量惨不忍睹，各种缩进不规范就不说了，先拿来试一下吧。</p>
+<p>这是淘宝店铺代码的核心部分：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span><span style="color: #000000;"> setup()
+{
+  Lcd_Init();
+ </span><span style="color: #008000;">//</span><span style="color: #008000;">LCD_Clear(0xf800);</span>
+<span style="color: #000000;">}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> loop()
+{  
+   LCD_Clear(</span><span style="color: #800080;">0xf800</span><span style="color: #000000;">);
+   LCD_Clear(</span><span style="color: #800080;">0x07E0</span><span style="color: #000000;">);
+   LCD_Clear(</span><span style="color: #800080;">0x001F</span><span style="color: #000000;">);
+  </span><span style="color: #008000;">/*</span><span style="color: #008000;">   
+  for(int i=0;i&lt;1000;i++)
+  {
+    Rect(random(300),random(300),random(300),random(300),random(65535)); // rectangle at x, y, with, hight, color
+  }</span><span style="color: #008000;">*/</span>
+  
+<span style="color: #008000;">//</span><span style="color: #008000;">  LCD_Clear(0xf800);</span>
+}</pre>
+</div>
+<p>代码里面的setup()和loop()是arduino特有的主函数，和普通C程序的main()函数一样。</p>
+<p>setup()函数在开机时只运行一次，运行完之后就开始循环运行loop()函数。</p>
+<p>程序先在setup()函数里做了一下初始化操作Lcd_Init()，接着开始连续用不同颜色清屏。</p>
+<p>这里的LCD_Clear()就是清屏函数了，原型如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span> LCD_Clear(unsigned <span style="color: #0000ff;">int</span><span style="color: #000000;"> j)                   
+{    
+  unsigned </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> i,m;
+ Address_set(</span><span style="color: #800080;">0</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">240</span>,<span style="color: #800080;">320</span><span style="color: #000000;">);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">Lcd_Write_Com(0x02c); </span><span style="color: #008000;">//</span><span style="color: #008000;">write_memory_start
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">digitalWrite(LCD_RS,HIGH);</span>
+<span style="color: #000000;">  digitalWrite(LCD_CS,LOW);
+
+
+  </span><span style="color: #0000ff;">for</span>(i=<span style="color: #800080;">0</span>;i&lt;<span style="color: #800080;">240</span>;i++<span style="color: #000000;">)
+    </span><span style="color: #0000ff;">for</span>(m=<span style="color: #800080;">0</span>;m&lt;<span style="color: #800080;">320</span>;m++<span style="color: #000000;">)
+    {
+      Lcd_Write_Data(j</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+      Lcd_Write_Data(j);
+
+    }
+  digitalWrite(LCD_CS,HIGH);   
+}</span></pre>
+</div>
+<p>缩进不规范就不吐槽了(；へ：)，连变量名都起得乱七八糟，简直惨不忍睹。稍微重写了一下函数，长这样：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span> LCD_Clear(unsigned <span style="color: #0000ff;">int</span><span style="color: #000000;"> color){
+  Address_set(</span><span style="color: #800080;">0</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">240</span>,<span style="color: #800080;">320</span><span style="color: #000000;">);
+  digitalWrite(LCD_CS,LOW);
+  </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i=<span style="color: #800080;">0</span>;i&lt;<span style="color: #800080;">240</span>;i++<span style="color: #000000;">){
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> m=<span style="color: #800080;">0</span>;m&lt;<span style="color: #800080;">320</span>;m++<span style="color: #000000;">){
+      Lcd_Write_Data(color</span>&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+      Lcd_Write_Data(color);
+    }
+  }
+  digitalWrite(LCD_CS,HIGH);
+}</span></pre>
+</div>
+<p>这个函数先使用Address_set()设置了刷新区域，然后把LCD_CS针脚电压拉低，之后循环写入color。</p>
+<p>color分两次写入，一次写入高八位(16位整形前面8个bit)，一次写入低八位。</p>
+<p>看上去好像没什么问题，但loop()函数中LCD_Clear()却是直接用十六进制写入的。</p>
+<p>写一个RGB()函数把RGB颜色转换成十六进制，不是更人性化吗？</p>
+<p>读了一遍源代码，结果真的找到了店家的RGB函数：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span> RGB(<span style="color: #0000ff;">int</span> r,<span style="color: #0000ff;">int</span> g,<span style="color: #0000ff;">int</span><span style="color: #000000;"> b)
+{</span><span style="color: #0000ff;">return</span> r &lt;&lt; <span style="color: #800080;">16</span> | g &lt;&lt; <span style="color: #800080;">8</span> |<span style="color: #000000;"> b;
+}</span></pre>
+</div>
+<p>还是不规范的缩进(╯︵╰)。但有总比没有好，输出红色试一下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span><span style="color: #000000;"> setup()
+{
+  Lcd_Init();
+  LCD_Clear(RGB(</span><span style="color: #800080;">255</span>,<span style="color: #800080;">0</span>,<span style="color: #800080;">0</span><span style="color: #000000;">));
+}
+
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> loop()
+{  
+   </span><span style="color: #008000;">//</span><span style="color: #008000;">nothing</span>
+}</pre>
+</div>
+<p>出故障了。</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123134343141-688251080.jpg" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Arduino重启后，屏幕输出了黑色！再试着排除一下故障，把RGB(255,0,0)改成RGB(0,255,0)，输出绿色试试：</p>
+<p>&nbsp;<img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123134358705-1410375781.jpg" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>结果输出了橙色！</p>
+<p>之后我又反复尝试了，没有一次输出正确的颜色。莫非是这个RGB()函数有问题，淘宝店铺才用十六进制数字？</p>
+<p>再仔细推导了一下：return r &lt;&lt; 16 | g &lt;&lt; 8 | b;把红色左移16位，绿色左移8位，蓝色不动，所以合成的二进制应该是这样的：</p>
+<div class="cnblogs_code">
+<pre>RRRRRRRRGGGGGGGGBBBBBBBB</pre>
+</div>
+<p>R代表红色位，G代表绿色位，B代表蓝色位，每种颜色8位，总共24位。计算了一下可能性：</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123131333862-1202122904.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;总共1677万种可能，也就是1677万种颜色，这就是普通电脑的真彩颜色。但LCD_Clear()函数是这么写的：</p>
+<div class="cnblogs_code">
+<pre>Lcd_Write_Data(color&gt;&gt;<span style="color: #800080;">8</span><span style="color: #000000;">);
+Lcd_Write_Data(color);</span></pre>
+</div>
+<p>总的只能写入十六个bit，也就是16位，这和24位对不上号啊？</p>
+<p>再回头看了一下，店铺代码的setup()函数中有这样一行白色清屏指令：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;">LCD_Clear(0xf800);</span></pre>
+</div>
+<p>0xf800换算成十进制，是63488，有没有感觉很接近一个数？</p>
+<p><span style="background-color: #ffff00;"><strong>没错，就是65535，单个16位无符号整数的最大储存范围。</strong></span></p>
+<p>16位整型变量，顾名思义就是用16个0和1组成的变量。可以储存的整数范围是-32768 ~ 32767，32768 + 32767刚好等于65535，换算到二进制，就是1111111111111111,16个1。</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123132036690-1173958173.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>这时，真相出现了&mdash;&mdash;这台机器所采用的，是<strong><span style="background-color: #ffff00;">16位颜色</span></strong>，也被成为<span style="background-color: #ffff00;"><strong>RGB565</strong></span>颜色模式。</p>
+<p>&nbsp;</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123133945056-1929095072.png" alt="" /></p>
+<p>早期的16位计算机由于架构的设计，一次只能处理一个16位二进制数。而图形显示对速度要求特别高，所以一个像素必须要用一个16进制数来表示，也就是16位颜色。</p>
+<p>如果用采用24位颜色，就需要两个16进制数，也就是2Bytes，速度就慢了一半。</p>
+<p>而每个像素都是使用红黄蓝三基色来显示的，所以一个16进制数必须分3份，来分别表示红、黄、蓝的数据。</p>
+<p>这就出现了一个问题：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800080;">16</span> / <span style="color: #800080;">3</span> = <span style="color: #800080;">5.33333</span></pre>
+</div>
+<p>红黄蓝三种颜色平均占用5.33333个bit。</p>
+<p>可bit是计算机存储的基本单位，要么是1，要么是0，不能再分割。必须要有一种颜色多用一个位，才能充分单个利用16进制整数。</p>
+<p>人体的绿色视锥细胞比较敏感，正好，那绿色就用6位，红色蓝色就用5位吧。</p>
+<p>这就是著名的RGB565模式，总共能存储65535种颜色。</p>
+<p>早期的游戏都采用这种模式，所以颜色不够丰富，很有特色：</p>
+<p>&nbsp;<img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123133324740-1549253005.png" alt="" width="277" height="172" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;这块ILI9341显示屏模块（注意不是ILI9341芯片本身）也刚好只有16根数据引脚，所以就采用了这种RGB565的颜色模式。</p>
+<p>找到了问题，那就改一下程序吧：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span> RGB(<span style="color: #0000ff;">int</span> r,<span style="color: #0000ff;">int</span> g,<span style="color: #0000ff;">int</span><span style="color: #000000;"> b)
+{
+  </span><span style="color: #0000ff;">return</span> r &lt;&lt; <span style="color: #800080;">11</span> | g &lt;&lt; <span style="color: #800080;">5</span> |<span style="color: #000000;"> b;
+}</span></pre>
+</div>
+<p>光改RGB()函数还不够，现在使用了RGB565模式，所以绿色范围是从0-63，红色、蓝色的范围是0-31。</p>
+<p>所以还得改setup里面的清屏函数：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">void</span><span style="color: #000000;"> setup()
+{
+  Lcd_Init();
+  LCD_Clear(RGB(</span><span style="color: #800080;">0</span>,<span style="color: #800080;">63</span>,<span style="color: #800080;">0</span><span style="color: #000000;">));
+}</span></pre>
+</div>
+<p>重新下载了程序，屏幕成功显示，输出了正确的绿色！&frasl;(&frasl;&frasl;&bull;&frasl;&omega;&frasl;&bull;&frasl;&frasl;)&frasl;</p>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191123134407662-920223489.jpg" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;那么问题来了，开头店家给的LCD_Clear(0xf800)这条清屏指令，是怎么来的？毕竟他连RGB565都不知道呢！</p>
+<p>这是我提供的一种可能性：</p>
+<blockquote>
+<p>&ldquo;0xf600试一下?&rdquo;</p>
+<p>&ldquo;不行，太灰了！&rdquo;</p>
+<p>&ldquo;那0xf700呢？&rdquo;</p>
+<p>&ldquo;还是不行！老板，我们都试了一下午了，肯定是屏幕坏了！&rdquo;</p>
+<p>&ldquo;加油，还差一点点了，肯定可以的！&rdquo;</p>
+<p>&ldquo;0xf800好像还行，但是还是有点灰！&rdquo;</p>
+<p>&ldquo;没关系，反正买家能点亮屏幕就行，其他的我们不管！&rdquo;</p>
+<p>&ldquo;&hellip;&hellip;&rdquo;</p>
+</blockquote>
+<p>所以这家淘宝店铺根本不知道自己在买什么。ヽ(￣▽￣)ﾉ</p>]]></description></item><item><title>STL库学习笔记（一）——什么是STL？</title><link>http://www.cnblogs.com/lyj00912/archive/2019/11/11/11839003.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 11 Nov 2019 14:35:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/11/11/11839003.html</guid><description><![CDATA[<p>小明是一个很牛逼的程序员，在国际标准化组织工作。</p>
+<p>他现在正在设计新一代的C++标准，标准中有一个待实现的函数：findMax()，这个函数要求使用者输入任何类型的数据，他都能找到最大的一个。</p>
+<p>于是他想到了这个：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span> findMax(<span style="color: #0000ff;">int</span> a,<span style="color: #0000ff;">int</span><span style="color: #000000;"> b){
+    </span><span style="color: #0000ff;">if</span>(a&gt;<span style="color: #000000;">b){
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> a;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> b;
+    }
+}
+</span><span style="color: #0000ff;">char</span> findMax(<span style="color: #0000ff;">char</span> a,<span style="color: #0000ff;">char</span><span style="color: #000000;"> b){
+    </span><span style="color: #0000ff;">if</span>(a&gt;<span style="color: #000000;">b){
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> a;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> b;
+    }
+}</span></pre>
+</div>
+<p>这种写法成功的解决了问题，可小明还是不满意：</p>
+<p>1.有太多冗余的代码，写出来的头文件又大又low，全世界的开发者都要骂娘</p>
+<p>2.又太多的数据结构需要兼容，还有世界各地的开发者整出来的奇形怪状的数据结构，不能满足标准库的要求</p>
+<p>它更换了一种写法：</p>
+<div class="cnblogs_code">
+<pre>template &lt;<span style="color: #0000ff;">class</span> T&gt;<span style="color: #000000;">
+T findMax(T a,T b){
+    </span><span style="color: #0000ff;">if</span>(a&gt;<span style="color: #000000;">b){
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> a;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> b;
+    }
+}</span></pre>
+</div>
+<p>看起来好奇怪！它能运行吗？</p>
+<p>让我们测试一下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span><span style="color: #000000;"> main(){
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">findMax(1,3):</span><span style="color: #800000;">"</span>&lt;&lt;findMax(<span style="color: #800080;">1</span>,<span style="color: #800080;">3</span>)&lt;&lt;<span style="color: #000000;">endl;
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">findMax('A','a'):</span><span style="color: #800000;">"</span>&lt;&lt;findMax(<span style="color: #800000;">'</span><span style="color: #800000;">A</span><span style="color: #800000;">'</span>,<span style="color: #800000;">'</span><span style="color: #800000;">a</span><span style="color: #800000;">'</span>)&lt;&lt;<span style="color: #000000;">endl;
+}</span></pre>
+</div>
+<p><img src="https://img2018.cnblogs.com/i-beta/1748871/201911/1748871-20191111221848643-438300626.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>运行的十分正常，这段函数成功了！此时传入函数的参数，只要能够用&ldquo;&gt;&rdquo;运算符来比较，就能够运行。比如int类型，函数会返回大的值，char类型，函数会返回ASCII码靠后的值。这称为<span style="background-color: #ffff00;"><strong>泛型编程（Generic Programming）</strong></span>，用人话来说就是用相同的方法处理不同的结构，而支撑这个思想的语法就成为<span style="background-color: #ffff00;"><strong>模板（template）</strong><span style="background-color: #ffffff;">。整个STL标准模板库就是使用template来实现的，他把教科书上的各种数据结构，比如链表啦，队列啦，栈啦，都封装到一起，供我们调（tou）用（lan），再配合它的algorithm算法库，连排序，二分查找都不用自己写啦！</span></span></p>]]></description></item><item><title>使用base64编码把背景添加到CSS文件中</title><link>http://www.cnblogs.com/lyj00912/archive/2019/08/24/11404884.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Sat, 24 Aug 2019 07:45:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/08/24/11404884.html</guid><description><![CDATA[<p>最近博客背景图片的外链挂了，没办法，只好另找办法。</p>
+<p>在博客园后台，有一个&ldquo;文件&rdquo;菜单，可以上传自己的文件，我就打算把图片传到里面。但却发现了一个很反人性的设置：不允许上传jpg，png文件，允许上传的只有bmp，gif这样的图片文件。bmp文件太大，加载都要好几秒，gif文件质量太差，只有256色，不能满足需求。估计这样不让我们传图片，是为了省流量吧。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824153516909-843754309.gif" alt="" /></p>
+<p>没办法，只好另辟蹊径。在允许上传的文件菜单里发现可以上传CSS。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824154621343-1793407087.gif" alt="" /></p>
+<p>&nbsp;</p>
+<p>首先把文件转成base64编码。百度base64能找到一堆工具：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824153935219-1323709106.png" alt="" /></p>
+<p>转换完之后创建一个css文件，写入如下内容：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">body</span>{<span style="color: #ff0000;">
+    background-image</span>:<span style="color: #0000ff;">url("你的base64字符串")</span>;
+}</pre>
+</div>
+<p>插入之后如图所示：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824154107439-898613325.png" alt="" /></p>
+<p>上传这个css到博客园后台的文件菜单：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824154223974-1983054294.png" alt="" /></p>
+<p>之后在后台设置的CSS中写入导入命令：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824154308266-569243427.png" alt="" /></p>
+<p>完成，现在你的博客首页就有不依靠外链的背景图片了：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190824154412157-1009831962.png" alt="" /></p>
+<p>&nbsp;</p>]]></description></item><item><title>CEF避坑指南（一）——编译并自制浏览器</title><link>http://www.cnblogs.com/lyj00912/archive/2019/08/20/11385654.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Tue, 20 Aug 2019 13:58:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/08/20/11385654.html</guid><description><![CDATA[<p>CEF即Chromium Embedded Framework，Chrome浏览器嵌入式框架。我们可以从自制浏览器入手，深入学习它。它提供了接口供程序员们把Chrome放到自己的程序中。许多大型公司，如网易、腾讯都开始使用CEF进行前端开发，小如网易的Minecraft启动器，大如微信电脑版，都可以使用前端技术进行开发。把C++或者其他编程语言于HTML相结合的CEF，能够实现更好的效果。但一旦你决定开始学CEF，就不可避免地会掉到坑里：中文文档参差不齐，官方文档着重于Linux，很多时候甚至不能自己成功编译CEF！经过2-3天的来回查阅，终于成功编译了cefsimple示例。希望这篇文档能帮你躲过一些坑！在文章的最后，你会得到一个属于你自己的浏览器！</p>
+<h1>1.下载CEF</h1>
+<p>使用cef有两种办法：自己编译源码，或者使用编译好内核的半成品，除非你是老练的Linux高手，否则还是建议使用后者，直接下载半成品是最快速，简洁的办法了。这个半成品叫做libcef。下载libcef的官方网址是<a href="http://cefbuilds.com/">http://cefbuilds.com/</a>，这个网站已经被墙。你也可以尝试在：<a href="http://opensource.spotify.com/cefbuilds/index.html">http://opensource.spotify.com/cefbuilds/index.html</a>这个映像站下载，不过可能要等上1-2天了。建议挂在远程服务器上下载，或者开代理下载。打开网站后，在页面最底部找到Windows 32-bit Build或Windows 64-bit Build，然后下载。</p>
+<p>注意：如果你考虑兼容32位计算机，那可以选择Windows 32-bit Build。但Windows 64-bit Build可以提供超过4GB的内存支持，多页面的话能提升性能（毕竟Chrome很吃内存的）。用Visual Studio在64位计算机编译32位程序会出现一些问题，比如CEF会导致编译失败。如果你打算兼容32位，那就需要找一台32位计算机来编译了。这里使用64位版本。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820210056874-204431027.png" alt="" /></p>
+<h1>2.Cmake生成解决方案</h1>
+<p>下载并解压之后，你应该会得到这些文件：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820211333568-2110632290.png" alt="" /></p>
+<p>这时你肯定会疑惑：我的sln和vcproj呢？答案是&mdash;&mdash;你需要使用Cmake。Cmake是一款跨平台的编译辅助工具，如果你在Windows，他可以生成sln和vcproj这样兼容Visual Studio的项目，如果你在Linux，那他也可以生成make这样兼容gcc编译器的项目。这样项目管理者可以一劳永逸，不用分别为Windows、Linux、Mac分别编写项目文件。</p>
+<p>Cmake官网也被墙了，你可以挂代理或者从下载站下载它。你需要下载最新版本，可以兼容Visual Studio 2019。打开Cmake：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820212354684-1137980656.png" alt="" /></p>
+<p>在Where is the source code框中选择下载下来的cef文件夹，接着再在cef文件夹中创建一个文件夹&ldquo;build&rdquo;，在Where to build binaries框中选择这个build文件夹，依次点击Configure&mdash;&mdash;Generate生成文件，不出意料，你的程序就&mdash;&mdash;出错了！</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820212832579-1382175806.png" alt="" /></p>
+<p>这是由于你选错了Visual Studio版本或者系统位数导致的，试着点击File&mdash;&mdash;Delete Chche清除配置，重来一遍。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820213149873-2144671738.png" alt="" /></p>
+<p>如果你生成成功，那你会看到这两条日志：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820213316187-1875225685.png" alt="" /></p>
+<p>恭喜你，已经完成大半了！</p>
+<h1>3.使用Visual Studio编译</h1>
+<p>打开刚才创建的build文件夹，你会找到cef.sln这个solution（解决方案）文件：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820213533339-657967480.png" alt="" /></p>
+<p>打开它，可以看到这个解决方案下有几个项目：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820213622344-237606826.png" alt="" /></p>
+<p>点击&ldquo;本地Windows调试器&rdquo;按钮，不出意料，你的程序就&mdash;&mdash;出错了！</p>
+<p>什么也没有打开。不知道你留意到ALL_BUILD项目的名字是粗体字了吗？这表示Visual Studio只会编译和执行这一个项目。而我们希望搭建的是cefsimple项目，怎么办呢？右键cefsimple项目，找到&ldquo;设为启动项目&rdquo;。之后你会发现cefsimple变成了粗体，这就表明设置成功了。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820214231324-1302057576.png" alt="" /></p>
+<p>点击&ldquo;本地Windows调试器&rdquo;按钮，不出意料，你的程序就&mdash;&mdash;出错了！</p>
+<p>又来？别担心，这应该是最后一次了，但这也是最头疼的一次。程序成功生成并运行了，但却提示&ldquo;无法定位程序输入点PowerDeterminePlatformRoleEx于POWRPROF.dll上&rdquo;！这让人十分抓狂。Debug？几十万行的Chrome怎么Debug，更何况还是半成品。作者只好先放在了一边。过了几天，在B站上偶然看到一篇Visual Studio的科普，提到了Debug和Release版本的区别。Debug是调试用版本，没有进行速度优化，而Release速度更快，但没办法使用断点等调试功能。试着把Debug换成Release：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820214941248-2118124930.png" alt="" /></p>
+<p>在等待了几分钟后，编译成功了！这次成功生成了一个名为cefsimple的窗口，但却不显示任何内容。我们打开cefsimple-&gt;cefsimple-&gt;simpleapp.cc，找到第89行，可以看到他默认访问http://www.google.com/，难怪访问不了！</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190821172452260-488588186.png" alt="" /></p>
+<p>更改成baidu.com，再进行编译：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190821172741073-1800449148.png" alt="" /></p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190821172756783-1732375586.png" alt="" /></p>
+<p>可以看到他成功访问了baidu.com！现在，我们也是可以开发浏览器的人了！</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190821173938149-1872233666.gif" alt="" /></p>
+<p>Enjoy it！</p>
+<p>喜欢的话就点个赞吧！</p>]]></description></item><item><title>基于类和对象的高精度算法封装</title><link>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11366683.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Fri, 16 Aug 2019 14:26:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11366683.html</guid><description><![CDATA[<h1>hi</h1>
+<p>这是使用类和对象的高精度计算封装实现，这能够进行面向对象的高精度计算编程。</p>
+<div class="cnblogs_code">
+<pre>#include&lt;iostream&gt;<span style="color: #000000;">
+#include</span>&lt;cstring&gt;
+<span style="color: #0000ff;">using</span> <span style="color: #0000ff;">namespace</span><span style="color: #000000;"> std;
+
+</span><span style="color: #0000ff;">class</span><span style="color: #000000;"> BIGINT{
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+        </span><span style="color: #0000ff;">int</span> num[<span style="color: #800080;">505</span><span style="color: #000000;">];
+        </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> length;
+        </span><span style="color: #0000ff;">bool</span><span style="color: #000000;"> positive;
+        BIGINT(</span><span style="color: #0000ff;">string</span> str=<span style="color: #800000;">""</span><span style="color: #000000;">){
+            memset(num, </span><span style="color: #800080;">0</span>, <span style="color: #0000ff;">sizeof</span><span style="color: #000000;">(num));
+            positive </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">if</span>(str == <span style="color: #800000;">""</span><span style="color: #000000;">){
+                </span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+                length </span>=<span style="color: #000000;"> str.length();
+                </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>; i&lt;str.length(); i++<span style="color: #000000;">){
+                    num[i] </span>= str[str.length()-i-<span style="color: #800080;">1</span>]-<span style="color: #800000;">'</span><span style="color: #800000;">0</span><span style="color: #800000;">'</span><span style="color: #000000;">;
+                }
+            }
+        }
+        </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> show(){
+            </span><span style="color: #0000ff;">if</span>(positive == <span style="color: #0000ff;">false</span><span style="color: #000000;">){
+                cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">-</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = length-<span style="color: #800080;">1</span>; i&gt;=<span style="color: #800080;">0</span>; i--<span style="color: #000000;">){
+                cout</span>&lt;&lt;<span style="color: #000000;">num[i];
+            }
+        }
+};
+
+</span><span style="color: #0000ff;">int</span> compare(BIGINT &amp;a,BIGINT &amp;<span style="color: #000000;">b){
+    </span><span style="color: #0000ff;">if</span>(a.length &gt;<span style="color: #000000;"> b.length){
+        </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">1</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span>(a.length &lt;<span style="color: #000000;"> b.length){
+        </span><span style="color: #0000ff;">return</span> -<span style="color: #800080;">1</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        </span><span style="color: #0000ff;">int</span> maxlen =<span style="color: #000000;"> max(a.length,b.length);
+        </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = maxlen-<span style="color: #800080;">1</span>; i&gt;=<span style="color: #800080;">0</span>; i--<span style="color: #000000;">){
+            </span><span style="color: #0000ff;">if</span>(a.num[i] &gt;<span style="color: #000000;"> b.num[i]){
+                </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">1</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span>(a.num[i] &lt;<span style="color: #000000;"> b.num[i]){
+                </span><span style="color: #0000ff;">return</span> -<span style="color: #800080;">1</span><span style="color: #000000;">;
+            }
+        }
+        </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+    }
+}
+
+BIGINT bigadd(BIGINT </span>&amp;a,BIGINT &amp;<span style="color: #000000;">b){
+    BIGINT c;
+    </span><span style="color: #0000ff;">int</span> maxlen =<span style="color: #000000;"> max(a.length,b.length);
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">相加</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;maxlen;i++<span style="color: #000000;">){
+        c.num[i] </span>= a.num[i] +<span style="color: #000000;"> b.num[i];
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">进位</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;maxlen;i++<span style="color: #000000;">){
+        </span><span style="color: #0000ff;">if</span>(c.num[i]&gt;=<span style="color: #800080;">10</span><span style="color: #000000;">){
+            c.num[i</span>+<span style="color: #800080;">1</span>] += <span style="color: #800080;">1</span><span style="color: #000000;">;
+            c.num[i] </span>= c.num[i] % <span style="color: #800080;">10</span><span style="color: #000000;">;
+        }
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">去零</span>
+    <span style="color: #0000ff;">if</span>(c.num[maxlen] == <span style="color: #800080;">0</span><span style="color: #000000;">){
+        c.length </span>=<span style="color: #000000;"> maxlen;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        c.length </span>= maxlen + <span style="color: #800080;">1</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> c;
+}
+
+BIGINT bigminus(BIGINT </span>&amp;a,BIGINT &amp;<span style="color: #000000;">b){
+    BIGINT c;
+    </span><span style="color: #0000ff;">int</span> maxlen =<span style="color: #000000;"> max(a.length,b.length);
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">判断</span>
+    <span style="color: #0000ff;">int</span> maxint =<span style="color: #000000;"> compare(a,b);
+    </span><span style="color: #0000ff;">if</span>(maxint == <span style="color: #800080;">1</span><span style="color: #000000;">){
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">相减</span>
+        <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;a.length;i++<span style="color: #000000;">){
+            </span><span style="color: #0000ff;">if</span>(a.num[i]&gt;=<span style="color: #000000;">b.num[i]){
+                c.num[i] </span>= a.num[i] -<span style="color: #000000;"> b.num[i];
+            }
+            </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+                a.num[i</span>+<span style="color: #800080;">1</span>] -= <span style="color: #800080;">1</span><span style="color: #000000;">;
+                a.num[i] </span>+= <span style="color: #800080;">10</span><span style="color: #000000;">;
+                c.num[i] </span>= a.num[i] -<span style="color: #000000;"> b.num[i];
+            }
+        }
+    }
+    </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span>(maxint == -<span style="color: #800080;">1</span><span style="color: #000000;">){
+        c </span>=<span style="color: #000000;"> bigminus(b,a);
+        c.positive </span>= <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">去零</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = maxlen+<span style="color: #800080;">1</span>;i&gt;=<span style="color: #800080;">0</span>;i--<span style="color: #000000;">){
+        </span><span style="color: #0000ff;">if</span>(c.num[i] != <span style="color: #800080;">0</span><span style="color: #000000;">){
+            c.length </span>= i+<span style="color: #800080;">1</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> c;
+        }
+    }
+    c.length </span>= <span style="color: #800080;">1</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> c;
+}
+
+BIGINT bigmultiply(BIGINT </span>&amp;a,BIGINT &amp;<span style="color: #000000;">b){
+    BIGINT c;
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">相乘</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;a.length;i++<span style="color: #000000;">){ 
+        </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> j = <span style="color: #800080;">0</span>;j&lt;b.length;j++<span style="color: #000000;">){   
+            c.num[i</span>+j] += a.num[i]*<span style="color: #000000;">b.num[j];
+            c.num[i</span>+j+<span style="color: #800080;">1</span>] += c.num[i+j]/<span style="color: #800080;">10</span><span style="color: #000000;">;
+            c.num[i</span>+j] %= <span style="color: #800080;">10</span><span style="color: #000000;">;
+        }
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">预估</span>
+    <span style="color: #0000ff;">int</span> len = a.length +<span style="color: #000000;"> b.length;
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">去零</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = len+<span style="color: #800080;">1</span>;i&gt;=<span style="color: #800080;">0</span>;i--<span style="color: #000000;">){
+        </span><span style="color: #0000ff;">if</span>(c.num[i] != <span style="color: #800080;">0</span><span style="color: #000000;">){
+            c.length </span>= i+<span style="color: #800080;">1</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> c;
+        }
+    }
+    c.length </span>= <span style="color: #800080;">1</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> c; 
+}
+
+BIGINT bigmultiplywithsmall(BIGINT a,</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> b){
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">相乘</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;a.length;i++<span style="color: #000000;">){
+        a.num[i] </span>*=<span style="color: #000000;"> b;
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">进位</span>
+    <span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;a.length+<span style="color: #800080;">1</span>;i++<span style="color: #000000;">){
+        </span><span style="color: #0000ff;">if</span>(a.num[i]&gt;=<span style="color: #800080;">10</span><span style="color: #000000;">){
+            a.num[i</span>+<span style="color: #800080;">1</span>] += a.num[i] / <span style="color: #800080;">10</span><span style="color: #000000;">;
+            a.num[i] </span>%= <span style="color: #800080;">10</span><span style="color: #000000;">;
+        }
+    }
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">去零</span>
+    <span style="color: #0000ff;">if</span>(a.num[a.length] != <span style="color: #800080;">0</span><span style="color: #000000;">){
+        a.length </span>+= <span style="color: #800080;">1</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> a;
+}
+
+</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> main(){
+    BIGINT a(</span><span style="color: #800000;">"</span><span style="color: #800000;">111111111</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    BIGINT b(</span><span style="color: #800000;">"</span><span style="color: #800000;">111111111</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    BIGINT tmp; 
+    
+    tmp </span>=<span style="color: #000000;"> bigadd(a,b);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">高精度加法:</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    tmp.show();
+    cout</span>&lt;&lt;<span style="color: #000000;">endl; 
+    
+    tmp </span>=<span style="color: #000000;"> bigminus(a,b);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">高精度减法:</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    tmp.show();
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    tmp </span>=<span style="color: #000000;"> bigmultiply(a,b);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">高精度乘法:</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    tmp.show();
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    tmp </span>= bigmultiplywithsmall(a,<span style="color: #800080;">100</span><span style="color: #000000;">);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">高低精乘法:</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    tmp.show();
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+}</span></pre>
+</div>]]></description></item><item><title>Vector使用方法简单整理</title><link>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11366564.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Fri, 16 Aug 2019 14:26:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11366564.html</guid><description><![CDATA[<p>使用vector，需要引用vector库：</p>
+<div class="cnblogs_code">
+<pre>#include&lt;vector&gt;</pre>
+</div>
+<p>首先，创建一个可以容纳int的vector变量&mdash;&mdash;arr：</p>
+<div class="cnblogs_code">
+<pre>vector&lt;<span style="color: #0000ff;">int</span>&gt; arr;</pre>
+</div>
+<p>接着，就可以使用一些vector的内建函数了：</p>
+<div class="cnblogs_code">
+<pre>arr.push_back(<span style="color: #800080;">9</span>);<span style="color: #008000;">//</span><span style="color: #008000;">在arr结尾插入数字9</span><span style="color: #000000;">
+arr.pop_back();</span><span style="color: #008000;">//</span><span style="color: #008000;">删除arr末尾最后一个项</span><span style="color: #000000;">
+arr.front();</span><span style="color: #008000;">//</span><span style="color: #008000;">arr的第一个项的值</span><span style="color: #000000;">
+arr.back();</span><span style="color: #008000;">//</span><span style="color: #008000;">arr的最后一个项的值</span><span style="color: #000000;">
+arr.begin();</span><span style="color: #008000;">//</span><span style="color: #008000;">arr的第一个项的指针</span><span style="color: #000000;">
+arr.end();</span><span style="color: #008000;">//</span><span style="color: #008000;">arr的最后一个项的指针</span><span style="color: #000000;">
+arr.size();</span><span style="color: #008000;">//</span><span style="color: #008000;">arr的实际长度</span><span style="color: #000000;">
+arr.erase(arr.begin(),arr.end());</span><span style="color: #008000;">//</span><span style="color: #008000;">删除从arr的第一个到最后一个项</span><span style="color: #000000;">
+arr.insert(arr.begin(),</span><span style="color: #800080;">5</span>);<span style="color: #008000;">//</span><span style="color: #008000;">在arr的头之前插入数字5</span><span style="color: #000000;">
+arr.insert(arr.begin(),</span><span style="color: #800080;">6</span>,<span style="color: #800080;">5</span>);<span style="color: #008000;">//</span><span style="color: #008000;">在arr的头之前插入6个5</span><span style="color: #000000;">
+arr.empty();</span><span style="color: #008000;">//</span><span style="color: #008000;">判断arr是否为空</span><span style="color: #000000;">
+arr.clear();</span><span style="color: #008000;">//</span><span style="color: #008000;">将arr清空</span></pre>
+</div>
+<p>Vector可以搭配一些算法使用，首先应用algorithm库：</p>
+<div class="cnblogs_code">
+<pre>#include&lt;algorithm&gt;</pre>
+</div>
+<p>算法函数如下：</p>
+<div class="cnblogs_code">
+<pre>sort(arr.begin(),arr.end());<span style="color: #008000;">//</span><span style="color: #008000;">对vector排序</span><span style="color: #000000;">
+stable_sort(arr.begin(),arr.end());</span><span style="color: #008000;">//</span><span style="color: #008000;">对vector稳定排序</span><span style="color: #000000;">
+reverse(arr.begin(),arr.end());</span><span style="color: #008000;">//</span><span style="color: #008000;">反转vector</span><span style="color: #000000;">
+vector</span>&lt;<span style="color: #0000ff;">int</span>&gt;::iterator newend =<span style="color: #000000;"> unique(arr.begin(),arr.end());</span><span style="color: #008000;">//</span><span style="color: #008000;">对arr去重，并把去重后的实际个数存在迭代器newend里面</span>
+<span style="color: #000000;">arr.erase(newend,arr.end());</span><span style="color: #008000;">//</span><span style="color: #008000;">把从newend到arr最后一项（即重复的数字）去除</span></pre>
+</div>
+<p>附上完整测试代码：</p>
+<div class="cnblogs_code">
+<pre>#include&lt;iostream&gt;<span style="color: #000000;">
+#include</span>&lt;vector&gt;<span style="color: #000000;">
+#include</span>&lt;algorithm&gt;
+<span style="color: #0000ff;">using</span> <span style="color: #0000ff;">namespace</span><span style="color: #000000;"> std;
+</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> main(){
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">Vector functions:</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    vector</span>&lt;<span style="color: #0000ff;">int</span>&gt;<span style="color: #000000;"> arr;
+    arr.push_back(</span><span style="color: #800080;">9</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">3</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">7</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">5</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">3</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">4</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">2</span><span style="color: #000000;">);
+    arr.push_back(</span><span style="color: #800080;">1</span><span style="color: #000000;">);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.push_back() : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    arr.pop_back();
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.pop_back()  : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.front()     : </span><span style="color: #800000;">"</span>&lt;&lt;arr.front()&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.back()      : </span><span style="color: #800000;">"</span>&lt;&lt;arr.back()&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.size()      : </span><span style="color: #800000;">"</span>&lt;&lt;arr.size()&lt;&lt;<span style="color: #000000;">endl;
+    
+    arr.erase(arr.begin()</span>+<span style="color: #800080;">4</span><span style="color: #000000;">,arr.end());
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.erase()     : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    arr.insert(arr.begin(),</span><span style="color: #800080;">6</span>,<span style="color: #800080;">5</span><span style="color: #000000;">);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.insert()    : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;endl&lt;&lt;endl&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">Algorithm functions:</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    sort(arr.begin(),arr.end());
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">sort():</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    reverse(arr.begin(),arr.end());
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">reverse():</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    vector</span>&lt;<span style="color: #0000ff;">int</span>&gt;::iterator oldend =<span style="color: #000000;"> arr.end();
+    vector</span>&lt;<span style="color: #0000ff;">int</span>&gt;<span style="color: #000000;">::iterator newend;
+    newend </span>=<span style="color: #000000;"> unique(arr.begin(),arr.end());
+    arr.erase(newend,oldend);
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">unique():</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;endl&lt;&lt;endl&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">Vector functions:</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.empty()     : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">if</span>(arr.empty() == <span style="color: #0000ff;">false</span><span style="color: #000000;">){
+        cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">false</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">true</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    }
+    
+    arr.clear();
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.clear()     : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">for</span>(<span style="color: #0000ff;">int</span> i = <span style="color: #800080;">0</span>;i&lt;arr.size();i++<span style="color: #000000;">){
+        cout</span>&lt;&lt;arr[i]&lt;&lt;<span style="color: #800000;">"</span> <span style="color: #800000;">"</span><span style="color: #000000;">;
+    }
+    cout</span>&lt;&lt;<span style="color: #000000;">endl;
+    
+    cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">arr.empty()     : </span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">if</span>(arr.empty() == <span style="color: #0000ff;">false</span><span style="color: #000000;">){
+        cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">false</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        cout</span>&lt;&lt;<span style="color: #800000;">"</span><span style="color: #800000;">true</span><span style="color: #800000;">"</span>&lt;&lt;<span style="color: #000000;">endl;
+    }
+}</span></pre>
+</div>
+<p>&nbsp;补充说明：在C中，有很多东西需要自己实现。C++提供了标准模板库（Standard Template Libray,STL）,其中封装了很多容器，不需要费力去实现它们的细节而直接调用函数来实现功能。vector是其中之一，vector指向量，可以理解为&ldquo;变长数组&rdquo;，长度根据需要而自动改变的数组。有时会碰到普通数组会超过内存的情况，可以使用vector解决。而且，vector可以用来以邻接表的方式存储图，可以解决当节点数太多，无法使用邻接矩阵，又害怕使用指针实现邻接表的时候，使用很简单。</p>]]></description></item><item><title>C++7行代码实现求最大公约数</title><link>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11363135.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Fri, 16 Aug 2019 04:24:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/08/16/11363135.html</guid><description><![CDATA[<p>最近在做奥赛题时碰到求最大公约数的问题，给出解决方案：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">int</span> gcd(<span style="color: #0000ff;">int</span> a,<span style="color: #0000ff;">int</span><span style="color: #000000;"> b){
+    </span><span style="color: #0000ff;">int</span> tmp = a%<span style="color: #000000;">b;
+    </span><span style="color: #0000ff;">if</span>(tmp == <span style="color: #800080;">0</span><span style="color: #000000;">){
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> b;
+    }
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">{
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> gcd(b,tmp);
+    }
+}</span></pre>
+</div>
+<p>使用递归的方法能有效缩短代码长度，达到目的。</p>
+<p>欧几里德算法又称<a href="https://baike.baidu.com/item/%E8%BE%97%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95/4625352" target="_blank" data-lemmaid="4625352">辗转相除法</a>，是指用于计算两个<a href="https://baike.baidu.com/item/%E6%AD%A3%E6%95%B4%E6%95%B0/8461335" target="_blank" data-lemmaid="8461335">正整数</a>a，b的<a href="https://baike.baidu.com/item/%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0/869308" target="_blank" data-lemmaid="869308">最大公约数</a>。应用领域有数学和计算机两个方面。计算公式gcd(a,b) = gcd(b,a mod b)。算法是用较大数除以较小数，再用出现的余数（第一余数）去除除数，再用出现的余数（第二余数）去除第一余数，如此反复，直到最后余数是0为止。如果是求两个数的最大公约数，那么最后的除数就是这两个数的最大公约数。贴张图：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190816122340903-2134318436.png" alt="" /></p>
+<p>&nbsp;</p>]]></description></item><item><title>如何调教你的博客Episode2——移动端支持和UI美化</title><link>http://www.cnblogs.com/lyj00912/archive/2019/07/24/11227484.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Wed, 24 Jul 2019 13:07:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/07/24/11227484.html</guid><description><![CDATA[<p>这个系列的文章是我在搭建博客园博客时所经历的过程。</p>
+<p>在上一期<a id="post_title_link_11226252" href="https://www.cnblogs.com/lyj00912/p/11226252.html">如何调教你的博客Episode1&mdash;&mdash;修改整体样式</a>中，我们通过添加CSS样式，修改了页面的总体布局。但将文章发出之后，博客的布局就出现问题了：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220805086-1726797860.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>由于总体布局的修改，导致了博客园的默认样式无法工作。另外在移动端中会出现横向滚动条。让我们继续魔改这个博客吧！</p>
+<h1>1.增加主窗口自适应</h1>
+<p>在上一期文章中，我们把id为main的主div宽度修改为页面的95%。但在页面缩小的时候却会出现横向滚动条。一查样式表，发现是main的min-width选项导致的：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220815743-1194015562.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;解决办法就是把min-width的宽度改为0px，这样就可以无限缩小，不产生横向滚动条了。为了避免两条规则冲突，就在这条规则后面加上了!important，将这条规则设置为最高优先级。好了，问题迎刃而解！</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">#main</span>{<span style="color: #ff0000;">
+    min-width</span>:<span style="color: #0000ff;"> 0px !important</span>;
+}</pre>
+</div>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220832578-1108295372.png" alt="" /></p>
+<p>&nbsp;</p>
+<h1>2.调整标题栏样式</h1>
+<p>将博客发布后，发现了一个重要问题：看官老爷们不知道我是谁。。。页面的顶端缺少标题，一个"Hi,there!"看起来很尴尬：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220902080-397685150.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>于是我稍微改进了一下，加入了导航条，效果是这样的：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220916050-223498658.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1>3.调整日期在移动端重叠的问题</h1>
+<p>文章目录页是布局最乱的地方，需要好好"调教"一下！</p>
+<p>首先是日期在移动端的重叠问题：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220928459-1118524423.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>将top:40px元素禁用掉会发现，原来标题和日期是两个分离的元素：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220938258-105238293.png" alt="" /></p>
+<p>&nbsp;</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">.dayTitle</span>{<span style="color: #ff0000;">
+    float</span>:<span style="color: #0000ff;">none !important</span>;<span style="color: #ff0000;">
+    top</span>:<span style="color: #0000ff;">0px !important</span>;<span style="color: #ff0000;">
+    text-align</span>:<span style="color: #0000ff;">center</span>;
+}</pre>
+</div>
+<p>这段代码把top改成了0px，文字进行居中，但效果不尽人意：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820220947909-1516237073.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>还是直接隐藏日期吧：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">.dayTitle</span>{<span style="color: #ff0000;">
+    display</span>:<span style="color: #0000ff;">none</span>;
+}</pre>
+</div>
+<h1>4.为缩略图设置统一大小</h1>
+<p>文章缩略图会根据自己的大小按比例显示，这就导致了图片大小参差不齐：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820221000194-2028072834.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>一开始的想法是把图片的宽度都设置成100%，高度让它自动缩放。但这样高度不会缩放，而是会变形，这时可以定义一个max-height:10000px，他就开始自动缩放了。高度不缩放可能是CSS标准没写明的地方，但定义max-height可能就会触发浏览器重载图片，达到目的。代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">.c_b_p_desc img</span>{<span style="color: #ff0000;">
+    width</span>:10<span style="color: #0000ff;">0%</span>;<span style="color: #ff0000;">
+    max-height</span>:<span style="color: #0000ff;">10000px</span>;
+}</pre>
+</div>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820221010135-421682894.png" alt="" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1>5.测试结果</h1>
+<p>分别在Windows7下的Chrome 75.0.3770.142和Android P默认浏览器下进行的测试，结果如图：</p>
+<p>&nbsp;<img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820221023534-414764928.png" alt="" /></p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201908/1748871-20190820221033493-718599731.png" alt="" /></p>
+<p>总体来说实现了移动端和PC端的兼容，优化了手机用户的体验。</p>]]></description></item><item><title>6个美观的纯CSS渐变背景代码分享(亲测有效)</title><link>http://www.cnblogs.com/lyj00912/archive/2019/07/22/11226288.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 22 Jul 2019 07:46:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/07/22/11226288.html</guid><description><![CDATA[<p><img src="https://img2018.cnblogs.com/blog/1748871/201907/1748871-20190722155456365-730424122.png" alt="" /></p>
+<h1>样式1</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #b100ff 20%,#00b3ff 80%);">&nbsp;</div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #b100ff 20%,#00b3ff 80%);</span></pre>
+</div>
+<h1>样式2</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #ff0064 20%,#ca00ff 80%);">&nbsp;</div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #ff0064 20%,#ca00ff 80%);</span></pre>
+</div>
+<h1>样式3</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #0078ff 20%,#002abb 80%);">&nbsp;</div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #0078ff 20%,#002abb 80%);</span></pre>
+</div>
+<h1>样式4</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #00ffd5 20%,#008cff 80%);">&nbsp;</div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #00ffd5 20%,#008cff 80%);</span></pre>
+</div>
+</div>
+<h1>样式5</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #ffce00 20%,#ff8b00 80%);">&nbsp;</div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #ffce00 20%,#ff8b00 80%);</span></pre>
+</div>
+</div>
+<h1>样式6</h1>
+<div style="widht: 100%; height: 40vh; background-image: linear-gradient(160deg, #a200ff 20%,#cf3700 80%);">&nbsp;</div>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">background-image: linear-gradient(160deg, #a200ff 20%,#cf3700 80%);</span></pre>
+</div>
+<div class="content_copy">转载自:<a href="http://www.n-bros.net/note/front_end/css/archives/4020/" target="_blank">http://www.n-bros.net/note/front_end/css/archives/4020/</a></div>]]></description></item><item><title>如何调教你的博客Episode1——修改整体样式</title><link>http://www.cnblogs.com/lyj00912/archive/2019/07/22/11226252.html</link><dc:creator>lyj00912</dc:creator><author>lyj00912</author><pubDate>Mon, 22 Jul 2019 07:40:00 GMT</pubDate><guid>http://www.cnblogs.com/lyj00912/archive/2019/07/22/11226252.html</guid><description><![CDATA[<p>如图所示，这是你刚刚注册的博客园博客，让我们开始一步步修改它。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201907/1748871-20190722151959579-1584794181.png" alt="" /></p>
+<h1>1.写入自适应代码</h1>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">html,body</span>{<span style="color: #ff0000;">
+height</span>:<span style="color: #0000ff;">100%</span>;<span style="color: #ff0000;">
+border</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+margin</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+padding</span>:<span style="color: #0000ff;">0</span>;
+}<span style="color: #800000;">
+body</span>{<span style="color: #ff0000;">
+background-repeat</span>:<span style="color: #0000ff;">no-repeat</span>;<span style="color: #ff0000;">
+background-size</span>:<span style="color: #0000ff;">cover</span>;<span style="color: #ff0000;"> 
+background-attachment</span>:<span style="color: #0000ff;">fixed</span>;<span style="color: #ff0000;">
+background-image</span>:<span style="color: #0000ff;">url("https://thumbs.dreamstime.com/b/%E9%9B%A8%E6%B0%B4%E6%B0%B4%E6%BB%B4%E5%9C%A8%E7%8E%BB%E7%92%83%E8%83%8C%E6%99%AF%E7%9A%84-%E8%A1%97%E9%81%93bokeh%E7%82%B9%E7%87%83ou-127043784.jpg")</span>;
+}<span style="color: #800000;">
+#home</span>{<span style="color: #ff0000;">
+width</span>:<span style="color: #0000ff;">95%</span>;
+}<span style="color: #800000;">
+#main</span>{<span style="color: #ff0000;">
+background</span>:<span style="color: #0000ff;">rgba(255,255,255,0.5)</span>;
+}<span style="color: #800000;">
+#mainContent</span>{<span style="color: #ff0000;">
+width</span>:<span style="color: #0000ff;">85%</span>;<span style="color: #ff0000;">
+background</span>:<span style="color: #0000ff;">transparent</span>;
+}<span style="color: #800000;">
+#blogTitle</span>{<span style="color: #ff0000;">
+display</span>:<span style="color: #0000ff;">none</span>;
+}</pre>
+</div>
+<p>这段代码调整了几个默认元素的宽度、高度和背景。由于CSS标准的规定，view的默认高度为0px，所以无法用百分比设置div的高度。这段代码中把html和body的高度设置为100%，确保了其他元素高度可用。</p>
+<h1>2.定义navbar和banner，实现渐变效果</h1>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">#navbar</span>{<span style="color: #ff0000;">
+height</span>:<span style="color: #0000ff;">5%</span>;<span style="color: #ff0000;">
+width</span>:<span style="color: #0000ff;">100%</span>;<span style="color: #ff0000;">
+border</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+margin</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+padding</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+box-shadow</span>:<span style="color: #0000ff;">0010px grey</span>;<span style="color: #ff0000;">
+background</span>:<span style="color: #0000ff;">rgba(255,255,255,0.5)</span>;
+}<span style="color: #800000;">
+#banner</span>{<span style="color: #ff0000;">
+height</span>:<span style="color: #0000ff;">40%</span>;<span style="color: #ff0000;">
+width</span>:<span style="color: #0000ff;">100%</span>;<span style="color: #ff0000;">
+border</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+margin</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+padding</span>:<span style="color: #0000ff;">0</span>;<span style="color: #ff0000;">
+box-shadow</span>:<span style="color: #0000ff;">0010px grey</span>;<span style="color: #ff0000;">
+background</span>:<span style="color: #0000ff;">linear-gradient(160deg, #00ffd520%,#008cff80%)</span>;
+}</pre>
+</div>
+<p>这段代码定义了两个div的样式，navbar和banner，这两个div会在下文用到。使用rgba函数实现了白色半透明，在使用CSS标准中的linear-gradient来实现纯CSS的渐变。</p>
+<h1>3.实现标题</h1>
+<div class="cnblogs_code">
+<pre><span style="color: #800000;">#titleText</span>{<span style="color: #ff0000;">
+text-align</span>:<span style="color: #0000ff;">center</span>;<span style="color: #ff0000;">
+font-size</span>:<span style="color: #0000ff;">10vh</span>;<span style="color: #ff0000;">
+font-family</span>:<span style="color: #0000ff;">Tahoma</span>;<span style="color: #ff0000;">
+color</span>:<span style="color: #0000ff;">white</span>;
+}<span style="color: #800000;">
+#wrapper</span>{<span style="color: #ff0000;">
+display</span>:<span style="color: #0000ff;">table</span>;<span style="color: #ff0000;">
+margin</span>:<span style="color: #0000ff;">0 auto</span>;<span style="color: #ff0000;">
+height</span>:<span style="color: #0000ff;">100%</span>;
+}<span style="color: #800000;">
+#cell</span>{<span style="color: #ff0000;">
+display</span>:<span style="color: #0000ff;">table-cell</span>;<span style="color: #ff0000;">
+vertical-align</span>:<span style="color: #0000ff;">middle</span>;<span style="color: #ff0000;">
+height</span>:<span style="color: #0000ff;">100%</span>;
+}</pre>
+</div>
+<p>&nbsp;</p>
+<p>这段代码定义了wrapper和cell，使用table样式特有的vertical-align选项实现了垂直居中。HTML代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">div </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="navbar"</span><span style="color: #0000ff;">&gt;&lt;/</span><span style="color: #800000;">div</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">div </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="banner"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">div </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="wrapper"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">div </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="cell"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">span </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="titleText"</span><span style="color: #0000ff;">&gt;</span>Hi,there!<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">span</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">div</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">div</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">div</span><span style="color: #0000ff;">&gt;</span></pre>
+</div>
+<h1>4.完成</h1>
+<p>经过上面的调教方法，你的博客应该会变成这样：</p>
+<p><img src="https://img2018.cnblogs.com/blog/1748871/201907/1748871-20190722153637737-1187283481.png" alt="" /></p>
+<p>看起来瞬间提升了一个等级！好了，这就是初步的调教过程。之后可能会有Episode2，毕竟折腾永无止境么！Hope you enjoy:)！</p>]]></description></item></channel></rss>
